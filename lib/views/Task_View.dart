@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:todolist_lite/widgets/Task_Tile.dart';
 
 class TaskView extends StatelessWidget {
   static final routeNames = "Task";
@@ -9,6 +10,9 @@ class TaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -55,10 +59,37 @@ class TaskView extends StatelessWidget {
                 child: Row(children: [
                   Text(
                     "My Tasks",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Quicksand"),
                   )
                 ]),
-              )
+              ),
+              Container(
+                child: Column(children: [
+                  TaskTile(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                ]),
+              ),
+              Container(
+                child: Column(children: [
+                  TaskTile(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                ]),
+              ),
+              Container(
+                child: Column(children: [
+                  TaskTile(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                ]),
+              ),
             ],
           )),
         ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:todolist_lite/views/Home.dart';
+import 'package:todolist_lite/views/Register_Page.dart';
 
 class LoginPage extends StatefulWidget {
-  static const routeNames = "/Login";
+  static const routeNames = "/LoginPage";
   const LoginPage({super.key});
 
   @override
@@ -30,13 +32,13 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       width: double.infinity,
                       height: 240,
                       child: Image.asset(
-                        "assets/images/login_image.jpg",
+                        "assets/images/logo/doLite-logo.png",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -117,7 +119,10 @@ class _LoginPageState extends State<LoginPage> {
                                                           10)),
                                               backgroundColor:
                                                   Color(0XFF2D31FA)),
-                                          onPressed: (() {}),
+                                          onPressed: (() {
+                                            Navigator.pushNamed(
+                                                context, Home.routeNames);
+                                          }),
                                           child: Text(
                                             "Login",
                                             style: TextStyle(
@@ -126,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                           )),
                                     ),
                                     SizedBox(
-                                      height: 8,
+                                      height: 12,
                                     ),
                                     Container(
                                       child: Row(children: [
@@ -157,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ]),
                                     ),
                                     SizedBox(
-                                      height: 8,
+                                      height: 12,
                                     ),
                                     Container(
                                       height: 44,
@@ -229,13 +234,17 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       Ink(
                                         child: InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(context,
+                                                  RegisterPage.routeName);
+                                            },
                                             child: Text(
-                                          "Register",
-                                          style: TextStyle(
-                                              color: Color(0XFF2D31FA),
-                                              fontFamily: "Quicksand",
-                                              fontWeight: FontWeight.w700),
-                                        )),
+                                              "Register",
+                                              style: TextStyle(
+                                                  color: Color(0XFF2D31FA),
+                                                  fontFamily: "Quicksand",
+                                                  fontWeight: FontWeight.w700),
+                                            )),
                                       )
                                     ]),
                               ),

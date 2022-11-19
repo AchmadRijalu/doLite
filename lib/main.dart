@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist_lite/views/Home.dart';
 import 'package:todolist_lite/views/Login_Page.dart';
+import 'package:todolist_lite/views/Register_Page.dart';
 import 'package:todolist_lite/views/Task_View.dart';
 
 void main() {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       routes: {
         Home.routeNames: (context) => Home(),
         TaskView.routeNames: (context) => TaskView(),
-        LoginPage.routeNames: (context) => LoginPage()
+        LoginPage.routeNames: (context) => LoginPage(),
+        RegisterPage.routeName: (context) => RegisterPage()
       },
     );
   }

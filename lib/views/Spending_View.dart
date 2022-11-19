@@ -9,7 +9,11 @@ class DoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Task")),
+      appBar: AppBar(
+          title: Text(
+        "Task",
+        style: TextStyle(fontFamily: "Quicksand"),
+      )),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
