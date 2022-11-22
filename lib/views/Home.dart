@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:todolist_lite/views/Spending_View.dart';
-import 'package:todolist_lite/views/Task_View.dart';
+import 'package:todolist_lite/views/Spending_Page.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
 
 class Home extends StatefulWidget {
   static final routeNames = "/";
@@ -21,12 +22,16 @@ class _HomeState extends State<Home> {
         icon: Icon(
           Icons.task_alt_rounded,
         ),
-        label: TaskView.routeNames),
+        label: TaskPage.routeNames),
     BottomNavigationBarItem(
-        icon: Icon(Icons.monetization_on_rounded), label: DoneView.routeNames)
+        icon: Icon(Icons.monetization_on_rounded),
+        label: SpendingPage.routeNames)
   ];
 
-  List<Widget> _listPageWidget = [TaskView(), DoneView()];
+  List<Widget> _listPageWidget = [
+    TaskPage(),
+    SpendingPage(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,12 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:todolist_lite/views/Auth_Page.dart';
+import 'package:todolist_lite/views/Forgot_Password_Page.dart';
 import 'package:todolist_lite/views/Home.dart';
+import 'package:todolist_lite/views/Logging_Page.dart';
 import 'package:todolist_lite/views/Login_Page.dart';
 import 'package:todolist_lite/views/Register_Page.dart';
-import 'package:todolist_lite/views/Task_View.dart';
+import 'package:todolist_lite/views/Task_Detail_Page.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -20,12 +30,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: LoginPage.routeNames,
+      initialRoute: Logging.routeNames,
       routes: {
         Home.routeNames: (context) => Home(),
-        TaskView.routeNames: (context) => TaskView(),
-        LoginPage.routeNames: (context) => LoginPage(),
-        RegisterPage.routeName: (context) => RegisterPage()
+        TaskDetailPage.routeNames: (context) => TaskDetailPage(),
+        TaskPage.routeNames: (context) => TaskPage(),
+        AuthPage.routeNames: (context) => AuthPage(),
+        Logging.routeNames: (context) => Logging(),
+        ForgotPasswordPage.routeName: (context) => ForgotPasswordPage()
       },
     );
   }

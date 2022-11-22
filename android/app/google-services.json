@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234818452864",
+    "project_id": "dolist-lite",
+    "storage_bucket": "dolist-lite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234818452864:android:7f0e33723fa397f30f5565",
+        "android_client_info": {
+          "package_name": "com.example.todolist_lite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234818452864-0f1ngvf2vaa8503pp6qc46b3ehq9vtc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Q5snXmTVNE3uQaGtag-2ilWFfjXsleg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234818452864-0f1ngvf2vaa8503pp6qc46b3ehq9vtc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
