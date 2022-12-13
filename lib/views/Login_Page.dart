@@ -184,15 +184,18 @@ class _LoginPageState extends State<LoginPage> {
                                                       : null;
                                                 },
                                                 decoration: InputDecoration(
+                                                    prefixIcon:
+                                                        Icon(Icons.email),
                                                     label: Text(
-                                                  "Email",
-                                                  style: TextStyle(
-                                                      fontFamily: "Quicksand",
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color:
-                                                          Colors.grey.shade500),
-                                                )),
+                                                      "Email",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              "Quicksand",
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: Colors
+                                                              .grey.shade500),
+                                                    )),
                                               ),
                                             ),
                                             SizedBox(
@@ -215,6 +218,8 @@ class _LoginPageState extends State<LoginPage> {
                                                       : null;
                                                 },
                                                 decoration: InputDecoration(
+                                                    prefixIcon:
+                                                        Icon(Icons.lock),
                                                     label: Text("Password",
                                                         style: TextStyle(
                                                             fontFamily:

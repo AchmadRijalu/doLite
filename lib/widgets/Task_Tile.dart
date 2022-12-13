@@ -64,36 +64,36 @@ class TaskTile extends StatelessWidget {
                                 ]),
                           ),
                         ),
-                        Ink(
-                          child: InkWell(
-                              onTap: () {
-                                showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    title: const Text('AlertDialog Title'),
-                                    content:
-                                        const Text('AlertDialog description'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, 'Cancel'),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, 'OK'),
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              child: Icon(
-                                Icons.delete_outline,
-                                color: Colors.grey,
-                              )),
-                        )
+                        // Ink(
+                        //   child: InkWell(
+                        //       onTap: () {
+                        //         showDialog<String>(
+                        //           context: context,
+                        //           builder: (BuildContext context) =>
+                        //               AlertDialog(
+                        //             title: const Text('AlertDialog Title'),
+                        //             content:
+                        //                 const Text('AlertDialog description'),
+                        //             actions: <Widget>[
+                        //               TextButton(
+                        //                 onPressed: () =>
+                        //                     Navigator.pop(context, 'Cancel'),
+                        //                 child: const Text('Cancel'),
+                        //               ),
+                        //               TextButton(
+                        //                 onPressed: () =>
+                        //                     Navigator.pop(context, 'OK'),
+                        //                 child: const Text('OK'),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: Icon(
+                        //         Icons.delete_outline,
+                        //         color: Colors.grey,
+                        //       )),
+                        // )
                       ]),
                     ],
                   ))),
@@ -131,7 +131,7 @@ class TaskTile extends StatelessWidget {
                             ]),
                       ))
                     ]),
-              ))
+              )),
         ]),
       ),
     );

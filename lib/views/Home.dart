@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
     TaskPage(),
     SpendingPage(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

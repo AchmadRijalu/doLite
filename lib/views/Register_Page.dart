@@ -69,6 +69,9 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } on FirebaseException catch (e) {
       if (e.code == "email-already-in-use") {
+        setState(() {
+          isLoad = false;
+        });
         return Fluttertoast.showToast(
             msg: "${"Email is already in use"}",
             toastLength: Toast.LENGTH_SHORT,
