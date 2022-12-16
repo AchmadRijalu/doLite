@@ -1,32 +1,28 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist_lite/models/CategoryTask.dart';
+import 'package:todolist_lite/models/Task.dart';
+import 'package:todolist_lite/models/item.dart';
 import 'package:todolist_lite/widgets/Category_Tile.dart';
+import 'package:todolist_lite/widgets/ListTask_Tile.dart';
 
 class AddTaskPage extends StatefulWidget {
   static const routeNames = "AddTask";
-  const AddTaskPage({super.key});
+  AddTaskPage();
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController dueDateController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  final _keyState = GlobalKey<FormState>();
-  FocusNode? _focusNode = FocusNode();
-  FocusNode? _focusNode2 = FocusNode();
-  FocusNode? _focusNode3 = FocusNode();
-
-  DateFormat dateFormat = DateFormat("E, d MMMM y");
-  DateFormat dueDateFormat = DateFormat("d MMMM y");
-  DateTime _dateTime = DateTime.now().add(Duration(days: 1));
-  DateTime initialDate = DateTime.now().add(Duration(days: 1));
+  callback() {
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -35,6 +31,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
     this.titleController;
     this.dueDateController;
     this.descriptionController;
+    setState(() {
+      listTask = listTask;
+    });
+    listTask;
+    super.didChangeDependencies();
 
     _focusNode!.addListener(() {
       setState(() {});
@@ -57,6 +58,93 @@ class _AddTaskPageState extends State<AddTaskPage> {
     dueDateController.dispose();
     descriptionController.dispose();
   }
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController dueDateController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  final TextEditingController taskListController = TextEditingController();
+  final _keyState = GlobalKey<FormState>();
+  final _keyStateTaskList = GlobalKey<FormState>();
+  FocusNode? _focusNode = FocusNode();
+  FocusNode? _focusNode2 = FocusNode();
+  FocusNode? _focusNode3 = FocusNode();
+
+  DateFormat dateFormat = DateFormat("E, d MMMM y");
+  DateFormat dueDateFormat = DateFormat("d MMMM y");
+  DateTime _dateTime = DateTime.now().add(Duration(days: 1));
+  DateTime initialDate = DateTime.now().add(Duration(days: 1));
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                  key: _keyStateTaskList,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: taskListController,
+                        validator: (value) {
+                          return value.toString().length < 2
+                              ? "Please input your Task"
+                              : null;
+                        },
+                        decoration: InputDecoration(hintText: "Enter New Task"),
+                      ),
+                    ],
+                  )),
+              title: Text('Add New Task'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.pink,
+                  ),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w700),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (_keyStateTaskList.currentState!.validate()) {
+                      setState(() {
+                        listTask = List.from(listTask)
+                          ..add(Task(name: taskListController.text));
+                      });
+                    }
+                    setState(
+                      () {
+                        callback();
+                      },
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  // Future createTodo(
+  //     {required String title,
+  //     required DateTime dateTime,
+  //     required String description,
+  //     required String category}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +205,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            labelText: "Email",
+                            labelText: "Title",
                             labelStyle: TextStyle(
                                 fontFamily: "Quicksand",
                                 fontWeight: FontWeight.w700,
@@ -229,44 +317,150 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                 ),
                 SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: categoryList.length,
+                      itemBuilder: ((context, index) {
+                        CategoryTask category = categoryList[index];
+                        return CategoryTile(
+                            color: category.categoryColor!,
+                            categoryName: category.categoryName!);
+                      })),
+                ),
+                SizedBox(
                   height: 24,
                 ),
                 Container(
-                  height: 80,
                   child: Row(children: [
-                    Expanded(
-                      flex: 4,
-                      child: Container(
-                          height: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(children: [
-                              CategoryTile(
-                                color: Colors.blue,
-                                categoryName: "Design",
-                              ),
-                              CategoryTile(
-                                color: Colors.blue,
-                                categoryName: "Coding",
-                              ),
-                            ]),
-                          )),
-                    ),
-                    Expanded(
-                      child: Ink(
-                        color: Colors.blue,
-                        child: InkWell(
-                          child: SvgPicture.asset(
-                            "assets/images/icons/add_icon_svg.svg",
-                            width: 40,
-                            height: 20,
-                          ),
-                        ),
-                      ),
-                    )
+                    Text("List of Tasks",
+                        style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold))
                   ]),
-                )
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: listTask.length,
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) {
+                        Task task = listTask[index];
+                        return ListTaskTile(
+                          onClick: (int val) {
+                            setState(() {
+                              listTask.removeAt(index);
+                              callback();
+                            });
+                          },
+                          name: task.name.toString(),
+                          id: index.toString(),
+                        );
+                      })),
+                ),
+                GestureDetector(
+                  onTap: (() {
+                    _showDialog(context);
+                  }),
+                  child: Container(
+                    child: Column(children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.grey.shade100,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        width: double.infinity,
+                        height: 40,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/images/icons/add_icon_svg.svg",
+                                width: 40,
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                "Add More",
+                                style: TextStyle(
+                                    fontFamily: 'Quicksand',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0XFF2D31FA)),
+                              )
+                            ]),
+                      ),
+                    ]),
+                  ),
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+                Container(
+                    width: double.infinity,
+                    height: 48,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: Colors.white,
+
+                        side: BorderSide(
+                            color: Colors.red, width: 2), //<-- SEE HERE
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          listTask = [];
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.red),
+                      ),
+                    )),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: (() {}),
+                    child: Text(
+                      "Save",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0XFF2D31FA)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)))),
+                  ),
+                ),
               ],
             ))),
       ),

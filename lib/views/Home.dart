@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:todolist_lite/views/Spending_Page.dart';
+
 import 'package:todolist_lite/views/Task_Page.dart';
 import 'package:todolist_lite/views/Task_Page.dart';
 
@@ -23,14 +23,10 @@ class _HomeState extends State<Home> {
           Icons.task_alt_rounded,
         ),
         label: TaskPage.routeNames),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.monetization_on_rounded),
-        label: SpendingPage.routeNames)
   ];
 
   List<Widget> _listPageWidget = [
     TaskPage(),
-    SpendingPage(),
   ];
 
   @override

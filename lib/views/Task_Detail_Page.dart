@@ -16,12 +16,13 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0XFF2D31FA),
         title: Text("Task Details"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
-          color: Colors.amber,
+          color: Colors.white,
           width: double.infinity,
           height: double.infinity,
           child: Column(children: [

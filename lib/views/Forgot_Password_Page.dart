@@ -6,7 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todolist_lite/main.dart';
 
-import '../utils/Loading.dart';
+import '../widgets/Loading.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   static const routeName = "/ForgotPassword";

@@ -8,10 +8,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:todolist_lite/main.dart';
-import 'package:todolist_lite/utils/Loading.dart';
+
 import 'package:todolist_lite/views/Forgot_Password_Page.dart';
 import 'package:todolist_lite/views/Home.dart';
 import 'package:todolist_lite/views/Register_Page.dart';
+
+import '../widgets/Loading.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback onClickSignUp;

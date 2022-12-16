@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todolist_lite/main.dart';
-import 'package:todolist_lite/utils/Loading.dart';
+import 'package:todolist_lite/widgets/Loading.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function() onClickSignUp;
@@ -64,6 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+
       setState(() {
         isLoad = false;
       });
@@ -167,31 +169,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                             SizedBox(
                                               height: 6,
                                             ),
-                                            // Container(
-                                            //   child: TextFormField(
-                                            //     autovalidateMode:
-                                            //         AutovalidateMode.onUserInteraction,
-                                            //     autofocus: false,
-                                            //     controller: usernameController,
-                                            //     validator: (value) {
-                                            //       return value.toString().length < 4
-                                            //           ? "Username must at least 4 characters"
-                                            //           : null;
-                                            //     },
-                                            //     decoration: InputDecoration(
-                                            //       label: Text(
-                                            //         "Username",
-                                            //         style: TextStyle(
-                                            //             fontFamily: "Quicksand",
-                                            //             fontWeight: FontWeight.w700,
-                                            //             color: Colors.grey.shade400),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            // SizedBox(
-                                            //   height: 6,
-                                            // ),
                                             Container(
                                               child: TextFormField(
                                                 autovalidateMode:

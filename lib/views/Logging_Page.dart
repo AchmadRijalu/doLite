@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:todolist_lite/utils/Loading.dart';
+import 'package:todolist_lite/widgets/Loading.dart';
 import 'package:todolist_lite/views/Auth_Page.dart';
 import 'package:todolist_lite/views/Login_Page.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
 
 import 'Home.dart';
 
@@ -26,7 +27,7 @@ class Logging extends StatelessWidget {
               child: Text("Something went wrong :("),
             );
           } else if (snapshot.hasData) {
-            return Home();
+            return TaskPage();
           } else {
             return AuthPage();
           }

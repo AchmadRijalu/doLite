@@ -12,7 +12,7 @@ class CategoryTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(12),
-      height: double.infinity,
+      height: 40,
       decoration: BoxDecoration(
           border: Border.all(color: color),
           borderRadius: BorderRadius.circular(12)),
@@ -21,7 +21,7 @@ class CategoryTile extends StatelessWidget {
           height: 25,
           width: 25,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50), color: Colors.blue),
+              borderRadius: BorderRadius.circular(50), color: color),
         ),
         SizedBox(
           width: 12,
