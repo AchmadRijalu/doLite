@@ -1,15 +1,26 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:todolist_lite/models/CategoryTask.dart';
-import 'package:todolist_lite/models/Task.dart';
+import 'package:todolist_lite/models/StatusTask.dart';
 import 'package:todolist_lite/models/item.dart';
+import 'package:todolist_lite/models/todo.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
 import 'package:todolist_lite/widgets/Category_Tile.dart';
-import 'package:todolist_lite/widgets/ListTask_Tile.dart';
+
+import '../widgets/StatusTask_Tile.dart';
 
 class AddTaskPage extends StatefulWidget {
   static const routeNames = "AddTask";
@@ -20,21 +31,27 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  callback() {
-    setState(() {});
-  }
+  // callback() {
+  //   setState(() {});
+  // }
+
+  int? statusSelected;
+  int? categorySelected;
+  String? statusTask;
+  String? categoryTask;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     this.titleController;
+    this.statusSelected;
+    this.categorySelected;
+    this.categoryTask;
+    this.statusTask;
     this.dueDateController;
     this.descriptionController;
-    setState(() {
-      listTask = listTask;
-    });
-    listTask;
+
     super.didChangeDependencies();
 
     _focusNode!.addListener(() {
@@ -75,76 +92,37 @@ class _AddTaskPageState extends State<AddTaskPage> {
   DateTime _dateTime = DateTime.now().add(Duration(days: 1));
   DateTime initialDate = DateTime.now().add(Duration(days: 1));
 
-  void _showDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          bool isChecked = false;
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              content: Form(
-                  key: _keyStateTaskList,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: taskListController,
-                        validator: (value) {
-                          return value.toString().length < 2
-                              ? "Please input your Task"
-                              : null;
-                        },
-                        decoration: InputDecoration(hintText: "Enter New Task"),
-                      ),
-                    ],
-                  )),
-              title: Text('Add New Task'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.pink,
-                  ),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(
-                        fontFamily: "Quicksand", fontWeight: FontWeight.w700),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    if (_keyStateTaskList.currentState!.validate()) {
-                      setState(() {
-                        listTask = List.from(listTask)
-                          ..add(Task(name: taskListController.text));
-                      });
-                    }
-                    setState(
-                      () {
-                        callback();
-                      },
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(
-                        fontFamily: "Quicksand", fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ],
-            );
-          });
-        });
+  Future createTodo(
+      {required String description, required String title}) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final createTodo = FirebaseFirestore.instance.collection("todo").doc();
+
+    final todo = Todo(
+        id: createTodo.id,
+        title: title,
+        description: description,
+        userId: auth.currentUser!.uid,
+        duedate: _dateTime,
+        status: statusTask,
+        category: categoryTask);
+
+    final todojson = todo.toJson();
+    await createTodo.set(todojson);
   }
 
-  // Future createTodo(
-  //     {required String title,
-  //     required DateTime dateTime,
-  //     required String description,
-  //     required String category}) {}
+  void onSelected(int index) {
+    setState(() {
+      statusSelected = index;
+      statusTask = StatusList[statusSelected!].name;
+    });
+  }
+
+  void onselectedCategory(int index) {
+    setState(() {
+      categorySelected = index;
+      categoryTask = categoryList[categorySelected!].categoryName;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -301,164 +279,158 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       SizedBox(
                         height: 24,
                       ),
-                    ]),
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    children: [
-                      Text(
-                        "Category",
-                        style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: categoryList.length,
-                      itemBuilder: ((context, index) {
-                        CategoryTask category = categoryList[index];
-                        return CategoryTile(
-                            color: category.categoryColor!,
-                            categoryName: category.categoryName!);
-                      })),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                Container(
-                  child: Row(children: [
-                    Text("List of Tasks",
-                        style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold))
-                  ]),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  width: double.infinity,
-                  child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: listTask.length,
-                      shrinkWrap: true,
-                      itemBuilder: ((context, index) {
-                        Task task = listTask[index];
-                        return ListTaskTile(
-                          onClick: (int val) {
-                            setState(() {
-                              listTask.removeAt(index);
-                              callback();
-                            });
-                          },
-                          name: task.name.toString(),
-                          id: index.toString(),
-                        );
-                      })),
-                ),
-                GestureDetector(
-                  onTap: (() {
-                    _showDialog(context);
-                  }),
-                  child: Container(
-                    child: Column(children: [
                       Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade100,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        width: double.infinity,
-                        height: 40,
                         child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/images/icons/add_icon_svg.svg",
-                                width: 40,
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                "Add More",
-                                style: TextStyle(
-                                    fontFamily: 'Quicksand',
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0XFF2D31FA)),
-                              )
-                            ]),
+                          children: [
+                            Text(
+                              "Category",
+                              style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: categoryList.length,
+                            itemBuilder: ((context, index) {
+                              CategoryTask category = categoryList[index];
+                              return CategoryTile(
+                                  selectedCategory: () =>
+                                      onselectedCategory(index),
+                                  checkCategory: index == categorySelected,
+                                  color: category.categoryColor!,
+                                  categoryName: category.categoryName!);
+                            })),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              "Status",
+                              style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: StatusList.length,
+                            itemBuilder: ((context, index) {
+                              StatusTask status = StatusList[index];
+                              return StatusTaskTile(
+                                selected: () => onSelected(index),
+                                check: index == statusSelected,
+                                image: status.image,
+                                name: status.name.toString(),
+                              );
+                            })),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Container(
+                          width: double.infinity,
+                          height: 48,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              backgroundColor: Colors.white,
+
+                              side: BorderSide(
+                                  color: Colors.red, width: 2), //<-- SEE HERE
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.red),
+                            ),
+                          )),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: (() async {
+                            if (_keyState.currentState!.validate()) {
+                              if (statusTask == null ||
+                                  categorySelected == null) {
+                                MotionToast.error(
+                                        layoutOrientation: ToastOrientation.ltr,
+                                        animationType: AnimationType.fromRight,
+                                        width: 300,
+                                        title: Text("Oopss!"),
+                                        description: Text(
+                                            "Please fill the status and category for your task!"))
+                                    .show(context);
+                                // Fluttertoast.showToast(
+                                //     msg:
+                                //         "Please fill the status and category for your task!",
+                                //     toastLength: Toast.LENGTH_SHORT,
+                                //     gravity: ToastGravity.BOTTOM,
+                                //     timeInSecForIosWeb: 1,
+                                //     backgroundColor: Colors.red,
+                                //     textColor: Colors.white,
+                                //     fontSize: 16.0);
+                              } else {
+                                await createTodo(
+                                    description: descriptionController.text,
+                                    title: titleController.text);
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    TaskPage.routeNames, (route) => false);
+                              }
+                            }
+                          }),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0XFF2D31FA)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12)))),
+                        ),
                       ),
                     ]),
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                ),
-                Container(
-                    width: double.infinity,
-                    height: 48,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        backgroundColor: Colors.white,
-
-                        side: BorderSide(
-                            color: Colors.red, width: 2), //<-- SEE HERE
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          listTask = [];
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.red),
-                      ),
-                    )),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: (() {}),
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0XFF2D31FA)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)))),
                   ),
                 ),
               ],

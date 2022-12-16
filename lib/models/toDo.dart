@@ -1,35 +1,49 @@
+// To parse this JSON data, do
+//
+//     final todo = todoFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:intl/intl.dart';
+Todo todoFromJson(String str) => Todo.fromJson(json.decode(str));
 
-ToDo toDoFromJson(String str) => ToDo.fromJson(json.decode(str));
+String todoToJson(Todo data) => json.encode(data.toJson());
 
-String toDoToJson(ToDo data) => json.encode(data.toJson());
-
-class ToDo {
-  ToDo({
-    required this.category,
-    required this.description,
-    required this.duedate,
-    required this.title,
+class Todo {
+  Todo({
+    this.category,
+    this.description,
+    this.duedate,
+    this.id,
+    this.status,
+    this.title,
+    this.userId,
   });
 
-  String category;
-  String description;
-  DateTime duedate;
-  String title;
+  String? category;
+  String? description;
+  DateTime? duedate;
+  String? id;
+  String? status;
+  String? title;
+  String? userId;
 
-  factory ToDo.fromJson(Map<String, dynamic> json) => ToDo(
-        category: json["Category"],
+  factory Todo.fromJson(Map<String, dynamic> json) => Todo(
+        category: json["category"],
         description: json["description"],
-        duedate: json["duedate"],
+        duedate: json["duedate"].toDate(),
+        id: json["id"],
+        status: json["status"],
         title: json["title"],
+        userId: json["user_id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "Category": category,
+        "category": category,
         "description": description,
         "duedate": duedate,
+        "id": id,
+        "status": status,
         "title": title,
+        "user_id": userId,
       };
 }

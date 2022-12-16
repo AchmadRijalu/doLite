@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluid_dialog/fluid_dialog.dart';
@@ -7,7 +8,9 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:todolist_lite/models/item.dart';
+import 'package:todolist_lite/models/toDo.dart';
 import 'package:todolist_lite/views/Add_Task_Page.dart';
 import 'package:todolist_lite/widgets/Task_Tile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -86,6 +89,107 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
+  Stream<List<Todo>> readTodo() {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    return FirebaseFirestore.instance
+        .collection('todo')
+        .where('user_id', isEqualTo: auth.currentUser!.uid)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((doc) => Todo.fromJson(doc.data())).toList());
+  }
+
+  Widget buildTodo(Todo todo) {
+    DateFormat dueDateFormat = DateFormat("d MMMM y");
+    return Column(
+      children: [
+        ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Dismissible(
+                confirmDismiss: (DismissDirection direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirm"),
+                        content: const Text(
+                            "Are you sure you wish to delete this Task?"),
+                        actions: <Widget>[
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.black),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16)))),
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text("Cancel")),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.red),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)))),
+                            onPressed: () {
+                              final docTodo = FirebaseFirestore.instance
+                                  .collection('todo')
+                                  .doc(todo.id);
+
+                              docTodo.delete();
+                              Navigator.of(context).pop(true);
+                            },
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                key: UniqueKey(),
+                background: Container(
+                  decoration: ShapeDecoration(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                secondaryBackground: Container(
+                  decoration: ShapeDecoration(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: <Color>[Colors.red, Colors.red], // red to yellow
+                    ),
+                  ),
+                  child: Card(
+                    color: Colors.red,
+                    margin: EdgeInsets.all(0),
+                    child: TaskTile(
+                        title: todo.title,
+                        status: todo.status,
+                        duedate:
+                            dueDateFormat.format(todo.duedate as DateTime)),
+                  ),
+                ))),
+        SizedBox(
+          height: 12,
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +198,7 @@ class _TaskPageState extends State<TaskPage> {
         child: Icon(Icons.add),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         onPressed: () {
-          Navigator.pushNamed(context, AddTaskPage.routeNames);
+          Navigator.push(context, _SlideUpAddTask());
         },
       ),
       body: SafeArea(
@@ -162,54 +266,52 @@ class _TaskPageState extends State<TaskPage> {
               SizedBox(
                 height: 12,
               ),
-              // AppBar(
-              //   bottom: TabBar(tabs: [
-              //     Tab(
-              //       text: "toDo",
-              //     ),
-              //     Tab(
-              //       text: "Finish",
-              //     )
-              //   ]),
-              // )
-              // Expanded(
-              //     flex: 9,
-              //     child: Container(
-              //       child: ListView.builder(
-              //           itemCount: listItem.length,
-              //           itemBuilder: ((context, index) {
-              //             return Slidable(
-              //                 endActionPane:
-              //                     ActionPane(motion: ScrollMotion(), children: [
-              //                   SlidableAction(
-              //                     autoClose: true,
-              //                     // An action can be bigger than the others.
+              Expanded(
+                  flex: 9,
+                  child: Container(
+                      child: StreamBuilder<List<Todo>>(
+                    stream: readTodo(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            "Something is Wrong! ${snapshot.error}",
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      } else if (snapshot.hasData) {
+                        final todo = snapshot.data!;
 
-              //                     onPressed: (value) {
-              //                       setState(() {
-              //                         listItem.removeAt(index);
-              //                       });
-              //                     },
-              //                     backgroundColor: Colors.red,
-              //                     foregroundColor: Colors.white,
-              //                     icon: Icons.delete,
-              //                     label: 'Delete',
-              //                   ),
-              //                 ]),
-              //                 child: Container(
-              //                   child: Column(children: [
-              //                     TaskTile(),
-              //                     SizedBox(
-              //                       height: 12,
-              //                     )
-              //                   ]),
-              //                 ));
-              //           })),
-              //     ))
+                        return ListView(children: todo.map(buildTodo).toList());
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  )))
             ],
           )),
         ),
       ),
     );
   }
+}
+
+Route _SlideUpAddTask() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => AddTaskPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
