@@ -36,6 +36,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   //   setState(() {});
   // }
 
+  late final LocalNotificationService notifService;
+
   int? statusSelected;
   int? categorySelected;
   String? statusTask;
@@ -65,6 +67,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     _focusNode3!.addListener(() {
       setState(() {});
     });
+
+    notifService = LocalNotificationService();
+    notifService.intialize();
   }
 
   @override
@@ -408,12 +413,28 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 await createTodo(
                                     description: descriptionController.text,
                                     title: titleController.text);
-                                // await notifService.showNotification(
-                                //     id: 0,
-                                //     title: "Congratulations!",
-                                //     body:
-                                //         "You have made a new todo list!
-                                // \nHope you can be more productive after this!");
+
+                                await notifService.showNotification(
+                                    id: 0,
+                                    title: "Selamat!",
+                                    body: "Todo list baru kamu berhasil dibuat!" +
+                                        "\nSemoga dapat membantu kamu lebih produktif lagi kedepannya!");
+
+                                await notifService.showScheduledNotification(
+                                    id: 1,
+                                    title: "AWASS!",
+                                    body: titleController.text.toString() +
+                                        " sudah mendekati deadline!\n Segera dikerjakan ya!",
+                                    day: _dateTime
+                                            .difference(DateTime.now())
+                                            .inDays +
+                                        1);
+                                // print((_dateTime
+                                //                 .difference(DateTime.now())
+                                //                 .inDays +
+                                //             1)
+                                //         .toString() +
+                                //     " days will be sent");
                                 // Fluttertoast.showToast(
                                 //     msg: "New Todo Created",
                                 //     toastLength: Toast.LENGTH_SHORT,

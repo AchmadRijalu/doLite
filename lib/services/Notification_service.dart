@@ -13,7 +13,7 @@ class LocalNotificationService {
   Future<void> intialize() async {
     tz.initializeTimeZones();
     const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@drawable/ic_stat_notifications_active');
+        AndroidInitializationSettings('@drawable/splash');
 
     DarwinInitializationSettings iosInitializationSettings =
         DarwinInitializationSettings(
@@ -63,14 +63,14 @@ class LocalNotificationService {
       {required int id,
       required String title,
       required String body,
-      required int seconds}) async {
+      required int day}) async {
     final details = await _notificationDetails();
     await _localNotificationService.zonedSchedule(
       id,
       title,
       body,
       tz.TZDateTime.from(
-        DateTime.now().add(Duration(seconds: seconds)),
+        DateTime.now().add(Duration(days: day)),
         tz.local,
       ),
       details,
