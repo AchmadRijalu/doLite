@@ -9,6 +9,7 @@ import 'package:todolist_lite/views/Logging_Page.dart';
 import 'package:todolist_lite/views/Login_Page.dart';
 import 'package:todolist_lite/views/Register_Page.dart';
 import 'package:todolist_lite/views/Task_Detail_Page.dart';
+import 'package:todolist_lite/views/Task_Notification.dart';
 import 'package:todolist_lite/views/Task_Page.dart';
 
 Future main() async {
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         AuthPage.routeNames: (context) => AuthPage(),
         Logging.routeNames: (context) => Logging(),
         ForgotPasswordPage.routeName: (context) => ForgotPasswordPage(),
-        AddTaskPage.routeNames: (context) => AddTaskPage()
+        AddTaskPage.routeNames: (context) => AddTaskPage(),
+        TaskNotification.routeNames: (context) => TaskNotification()
       },
     );
   }
