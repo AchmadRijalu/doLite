@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:todolist_lite/models/toDo.dart';
 import 'package:todolist_lite/views/Add_Task_Page.dart';
 import 'package:todolist_lite/views/Auth_Page.dart';
+import 'package:todolist_lite/views/Edit_Task_Page.dart';
 import 'package:todolist_lite/views/Forgot_Password_Page.dart';
 import 'package:todolist_lite/views/Home.dart';
 import 'package:todolist_lite/views/Logging_Page.dart';
@@ -50,7 +51,9 @@ class MyApp extends StatelessWidget {
         AuthPage.routeNames: (context) => AuthPage(),
         Logging.routeNames: (context) => Logging(),
         ForgotPasswordPage.routeName: (context) => ForgotPasswordPage(),
-        AddTaskPage.routeNames: (context) => AddTaskPage()
+        EditTaskPage.routeNames:(context) => EditTaskPage(
+          id: ModalRoute.of(context)!.settings.arguments as Map<dynamic,dynamic>
+        )
       },
     );
   }

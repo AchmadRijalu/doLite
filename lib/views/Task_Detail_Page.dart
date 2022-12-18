@@ -9,6 +9,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:todolist_lite/models/CategoryTask.dart';
 import 'package:todolist_lite/models/StatusTask.dart';
 import 'package:todolist_lite/models/toDo.dart';
+import 'package:todolist_lite/views/Edit_Task_Page.dart';
 
 class TaskDetailPage extends StatefulWidget {
   static const routeNames = "/TaskDetails";
@@ -43,6 +44,19 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, EditTaskPage.routeNames, arguments: {
+                  'id' : _taskId
+                });
+              },
+              child: Icon(Icons.edit),
+            )
+            )
+        ],
         title: Row(
           children: [
             Text(
