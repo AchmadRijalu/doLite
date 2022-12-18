@@ -47,6 +47,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       for (var cat in categoryList) {
         if(snapshot.docs.first['category'] == cat.categoryName){
           this.categorySelected = loopCatIndex;
+          this.categoryTask = cat.categoryName;
         } else {
           loopCatIndex++;
         }
@@ -54,6 +55,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       for (var stat in StatusList) {
         if(snapshot.docs.first['status'] == stat.name){
           this.statusSelected = loopStatIndex;
+          this.statusTask = stat.name;
         } else {
           loopStatIndex++;
         }
