@@ -10,6 +10,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:todolist_lite/models/CategoryTask.dart';
 import 'package:todolist_lite/models/StatusTask.dart';
 import 'package:todolist_lite/models/toDo.dart';
+import 'package:todolist_lite/views/Task_Detail_Page.dart';
 import 'package:todolist_lite/views/Task_Page.dart';
 import 'package:todolist_lite/widgets/Category_Tile.dart';
 import 'package:todolist_lite/widgets/StatusTask_Tile.dart';
@@ -29,23 +30,35 @@ class _EditTaskPageState extends State<EditTaskPage> {
   int? categorySelected;
   String? statusTask;
   String? categoryTask;
+  int loopStatIndex = 0;
+  int loopCatIndex = 0;
 
   static String _taskId = '';
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _taskId = widget.id['id'];
     FirebaseFirestore.instance.collection('todo').where('id', isEqualTo: _taskId).snapshots().listen((QuerySnapshot snapshot) {
       this.titleController.text = snapshot.docs.first['title'];
       this.dueDateController.text = dueDateFormat.format(snapshot.docs.first['duedate'].toDate());
       this._dateTime = snapshot.docs.first['duedate'].toDate();
       this.descriptionController.text = snapshot.docs.first['description'];
+      for (var cat in categoryList) {
+        if(snapshot.docs.first['category'] == cat.categoryName){
+          this.categorySelected = loopCatIndex;
+        } else {
+          loopCatIndex++;
+        }
+      }
+      for (var stat in StatusList) {
+        if(snapshot.docs.first['status'] == stat.name){
+          this.statusSelected = loopStatIndex;
+        } else {
+          loopStatIndex++;
+        }
+      }
     });
-    this.statusSelected;
-    this.categorySelected;
     this.categoryTask;
     this.statusTask;
     this.dueDateController;
@@ -65,7 +78,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
     });
 
   }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -99,10 +111,12 @@ class _EditTaskPageState extends State<EditTaskPage> {
   }
 
   Future updateTodo({required String description, required String title}) async{
+    final FirebaseAuth auth = FirebaseAuth.instance;
     final todo = Todo(
       id: _taskId,
       title: title,
       description: description,
+      userId: auth.currentUser!.uid,
       duedate: _dateTime,
       status: statusTask,
       category: categoryTask
@@ -170,19 +184,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
             return Text("Error occurred ${snapshot.error}");
           } else if (snapshot.hasData) {
             final todo = snapshot.data;
-            // titleController.value = TextEditingValue(
-            //   text: todo['title'],
-            //   selection: TextSelection.fromPosition(
-            //     TextPosition(offset: todo['title'].length)
-            //   )
-            // );
-            // String date = dueDateFormat.format(todo['duedate'].toDate());
-            // dueDateController.value = TextEditingValue(
-            //   text: dueDateFormat.format(todo['duedate'].toDate()),
-            //   selection: TextSelection.fromPosition(
-            //     TextPosition(offset: date.length)
-            //   )
-            // );
             return Container(
               child: Padding(
           padding: const EdgeInsets.all(20),
@@ -339,6 +340,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                               itemCount: categoryList.length,
                               itemBuilder: ((context, index) {
                                 CategoryTask category = categoryList[index];
+                                print("Cat Select: $categorySelected");
+                                print(index);
                                 return CategoryTile(
                                     selectedCategory: () =>
                                         onselectedCategory(index),
@@ -375,6 +378,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                               itemCount: StatusList.length,
                               itemBuilder: ((context, index) {
                                 StatusTask status = StatusList[index];
+                                print(index);
+                                print("Status Select : $statusSelected");
                                 return StatusTaskTile(
                                   selected: () => onSelected(index),
                                   check: index == statusSelected,
@@ -429,21 +434,12 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                           description: Text(
                                               "Please fill the status and category for your task!"))
                                       .show(context);
-                                  // Fluttertoast.showToast(
-                                  //     msg:
-                                  //         "Please fill the status and category for your task!",
-                                  //     toastLength: Toast.LENGTH_SHORT,
-                                  //     gravity: ToastGravity.BOTTOM,
-                                  //     timeInSecForIosWeb: 1,
-                                  //     backgroundColor: Colors.red,
-                                  //     textColor: Colors.white,
-                                  //     fontSize: 16.0);
                                 } else {
-                                  await createTodo(
-                                      description: descriptionController.text,
-                                      title: titleController.text);
+                                  await updateTodo(description: descriptionController.text, title: titleController.text);
                                   Navigator.pushNamedAndRemoveUntil(context,
-                                      TaskPage.routeNames, (route) => false);
+                                      TaskDetailPage.routeNames, arguments: {
+                                        'todoId' : widget.id['id']
+                                      }, (route) => false);
                                 }
                               }
                             }),

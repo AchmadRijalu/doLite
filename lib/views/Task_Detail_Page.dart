@@ -10,6 +10,7 @@ import 'package:todolist_lite/models/CategoryTask.dart';
 import 'package:todolist_lite/models/StatusTask.dart';
 import 'package:todolist_lite/models/toDo.dart';
 import 'package:todolist_lite/views/Edit_Task_Page.dart';
+import 'package:todolist_lite/views/Task_Page.dart';
 
 class TaskDetailPage extends StatefulWidget {
   static const routeNames = "/TaskDetails";
@@ -22,7 +23,7 @@ class TaskDetailPage extends StatefulWidget {
 
 class _TaskDetailPageState extends State<TaskDetailPage> {
 
-  static String _taskId = '';
+  var _taskId = '';
 
   @override
   void initState() {
@@ -44,6 +45,10 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black,),
+          onPressed: () => Navigator.popAndPushNamed(context, TaskPage.routeNames,
+        ),),
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 20),
