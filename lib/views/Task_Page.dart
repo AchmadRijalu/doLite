@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:todolist_lite/models/item.dart';
 import 'package:todolist_lite/models/toDo.dart';
 import 'package:todolist_lite/views/Add_Task_Page.dart';
+import 'package:todolist_lite/views/Task_Notification.dart';
 import 'package:todolist_lite/widgets/Task_Tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -236,7 +237,10 @@ class _TaskPageState extends State<TaskPage> {
                         IconButton(
                             onPressed: (() {}), icon: Icon(Icons.search)),
                         IconButton(
-                            onPressed: (() {}),
+                            onPressed: (() {
+                              Navigator.pushNamed(
+                                  context, TaskNotification.routeNames);
+                            }),
                             icon: Icon(Icons.notifications_none_outlined)),
                         IconButton(
                             onPressed: (() async {

@@ -17,6 +17,7 @@ import 'package:todolist_lite/models/CategoryTask.dart';
 import 'package:todolist_lite/models/StatusTask.dart';
 import 'package:todolist_lite/models/item.dart';
 import 'package:todolist_lite/models/todo.dart';
+import 'package:todolist_lite/services/Notification_service.dart';
 import 'package:todolist_lite/views/Task_Page.dart';
 import 'package:todolist_lite/widgets/Category_Tile.dart';
 
@@ -34,6 +35,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   // callback() {
   //   setState(() {});
   // }
+
+  late final LocalNotificationService notifService;
 
   int? statusSelected;
   int? categorySelected;
@@ -64,6 +67,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     _focusNode3!.addListener(() {
       setState(() {});
     });
+
+    notifService = LocalNotificationService();
+    notifService.intialize();
   }
 
   @override
@@ -135,7 +141,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               child: SvgPicture.asset("assets/images/icons/add_icon_svg.svg"),
             ),
             SizedBox(
-              width: 8,
+              width: 12,
             ),
             Text(
               "Add New Task",
@@ -407,6 +413,34 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 await createTodo(
                                     description: descriptionController.text,
                                     title: titleController.text);
+
+                                await notifService.showNotification(
+                                    id: 0,
+                                    title: "Selamat!",
+                                    body: "Todo list baru kamu berhasil dibuat!" +
+                                        "\nSemoga dapat membantu kamu lebih produktif lagi kedepannya!");
+
+                                await notifService.showScheduledNotification(
+                                    id: 1,
+                                    title: "AWASS!",
+                                    body: titleController.text.toString() +
+                                        " sudah mendekati deadline!\n Segera dikerjakan ya!",
+                                    day: _dateTime
+                                            .difference(DateTime.now())
+                                            .inDays +
+                                        1);
+                                // print((_dateTime
+                                //                 .difference(DateTime.now())
+                                //                 .inDays +
+                                //             1)
+                                //         .toString() +
+                                //     " days will be sent");
+                                // Fluttertoast.showToast(
+                                //     msg: "New Todo Created",
+                                //     toastLength: Toast.LENGTH_SHORT,
+                                //     fontSize: 12,
+                                //     backgroundColor: Colors.amber,
+                                //     textColor: Colors.black);
                                 Navigator.pushNamedAndRemoveUntil(context,
                                     TaskPage.routeNames, (route) => false);
                               }
