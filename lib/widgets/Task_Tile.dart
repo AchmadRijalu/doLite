@@ -6,11 +6,14 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:todolist_lite/views/Task_Detail_Page.dart';
 
 class TaskTile extends StatelessWidget {
+  String? todoID;
   String? title;
   String? duedate;
+  String? desc;
   String? status;
   TaskTile(
       {super.key,
+      required this.todoID,
       required this.title,
       required this.duedate,
       required this.status});
@@ -19,7 +22,9 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (() {
-        Navigator.pushNamed(context, TaskDetailPage.routeNames);
+        Navigator.pushNamed(context, TaskDetailPage.routeNames, arguments: {
+          'todoId' : todoID
+        });
       }),
       child: Container(
           decoration: BoxDecoration(

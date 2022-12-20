@@ -178,6 +178,7 @@ class _TaskPageState extends State<TaskPage> {
                     color: Colors.red,
                     margin: EdgeInsets.all(0),
                     child: TaskTile(
+                        todoID: todo.id,
                         title: todo.title,
                         status: todo.status,
                         duedate:
