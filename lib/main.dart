@@ -14,6 +14,7 @@ import 'package:todolist_lite/views/Task_Detail_Page.dart';
 import 'package:todolist_lite/views/Task_Notification.dart';
 import 'package:todolist_lite/views/Task_Page.dart';
 
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -48,7 +49,6 @@ class MyApp extends StatelessWidget {
         TaskDetailPage.routeNames: (context) => TaskDetailPage(
           todoId: ModalRoute.of(context)!.settings.arguments as Map<dynamic,dynamic>
         ),
-        TaskPage.routeNames: (context) => TaskPage(),
         AuthPage.routeNames: (context) => AuthPage(),
         Logging.routeNames: (context) => Logging(),
         ForgotPasswordPage.routeName: (context) => ForgotPasswordPage(),
