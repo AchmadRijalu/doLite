@@ -1,27 +1,4 @@
-import 'dart:ffi';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:motion_toast/motion_toast.dart';
-import 'package:motion_toast/resources/arrays.dart';
-import 'package:todolist_lite/models/CategoryTask.dart';
-import 'package:todolist_lite/models/StatusTask.dart';
-import 'package:todolist_lite/models/item.dart';
-import 'package:todolist_lite/models/todo.dart';
-import 'package:todolist_lite/services/Notification_service.dart';
-import 'package:todolist_lite/views/Task_Page.dart';
-import 'package:todolist_lite/widgets/Category_Tile.dart';
-
-import '../widgets/StatusTask_Tile.dart';
+part of 'Pages.dart';
 
 class AddTaskPage extends StatefulWidget {
   static const routeNames = "AddTask";

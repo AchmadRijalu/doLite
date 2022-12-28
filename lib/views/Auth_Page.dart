@@ -1,8 +1,4 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:todolist_lite/views/Logging_Page.dart';
-import 'package:todolist_lite/views/Login_Page.dart';
-import 'package:todolist_lite/views/Register_Page.dart';
+part of 'Pages.dart';
 
 class AuthPage extends StatefulWidget {
   static const routeNames = "AuthPage";

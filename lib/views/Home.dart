@@ -1,10 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
-import 'package:todolist_lite/views/Task_Page.dart';
-import 'package:todolist_lite/views/Task_Page.dart';
+part of 'Pages.dart';
 
 class Home extends StatefulWidget {
   static final routeNames = "/";

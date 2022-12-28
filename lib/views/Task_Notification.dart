@@ -1,12 +1,4 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:todolist_lite/models/toDo.dart';
-import 'package:todolist_lite/services/Notification_service.dart';
+part of 'Pages.dart';
 
 class TaskNotification extends StatefulWidget {
   static final routeNames = "Task_Notification";

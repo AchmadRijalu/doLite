@@ -1,12 +1,4 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:todolist_lite/main.dart';
-
-import '../widgets/Loading.dart';
+part of 'Pages.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   static const routeName = "/ForgotPassword";

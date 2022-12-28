@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:todolist_lite/views/Task_Detail_Page.dart';
+part of 'Widgets.dart';
 
 class TaskTile extends StatelessWidget {
   String? todoID;
@@ -22,9 +17,8 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (() {
-        Navigator.pushNamed(context, TaskDetailPage.routeNames, arguments: {
-          'todoId' : todoID
-        });
+        Navigator.pushNamed(context, TaskDetailPage.routeNames,
+            arguments: {'todoId': todoID});
       }),
       child: Container(
           decoration: BoxDecoration(
