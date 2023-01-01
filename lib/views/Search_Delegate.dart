@@ -1,70 +1,35 @@
 part of 'Pages.dart';
+class cardBuilder extends StatefulWidget {
+  const cardBuilder({super.key});
 
-class CustomSearchDelegate extends SearchDelegate {
-  get context => null;
-  late final toDo_lookup todolookup;
+  @override
+  State<cardBuilder> createState() => _cardBuilderState();
+}
 
-  Stream<List<Todo>> readTodo(String string) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    return FirebaseFirestore.instance
-        .collection('todo')
-        .where('user_id', isEqualTo: auth.currentUser!.uid)
-        .where('title'.toLowerCase(), isEqualTo: string.toLowerCase())
-        .snapshots()
-        .map((event) =>
-            event.docs.map((doc) => Todo.fromJson(doc.data())).toList());
+class _cardBuilderState extends State<cardBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
-
-  Widget buildTodo(Todo todo) {
+  
+Widget buildTodo(Todo todo) {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
       children: [
         ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Dismissible(
-                confirmDismiss: (DismissDirection direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Confirm"),
-                        content: const Text(
-                            "Are you sure you wish to delete this Task?"),
-                        actions: <Widget>[
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.black),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16)))),
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: const Text("Cancel")),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.red),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)))),
-                            onPressed: () {
-                              final docTodo = FirebaseFirestore.instance
-                                  .collection('todo')
-                                  .doc(todo.id);
+                onDismissed: (DismissDirection direction) {
+                  builder: (BuildContext context) {
+                    setState(() {
+                      final docTodo = FirebaseFirestore.instance
+                                    .collection('todo')
+                                    .doc(todo.id);
 
-                              docTodo.delete();
-                              Navigator.of(context).pop(true);
-                            },
-                            child: const Text("Delete"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                      docTodo.delete();
+                      Navigator.of(context).pop(true);
+                    });
+                  };
                 },
                 key: UniqueKey(),
                 background: Container(
@@ -107,6 +72,24 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
+}
+class CustomSearchDelegate extends SearchDelegate {
+  get context => null;
+  late final toDo_lookup todolookup;
+  final _cardBuilderState taskpage = new _cardBuilderState();
+
+
+  Stream<List<Todo>> readTodo(String string) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    return FirebaseFirestore.instance
+        .collection('todo')
+        .where('user_id', isEqualTo: auth.currentUser!.uid)
+        .where('title'.toLowerCase(), isEqualTo: string.toLowerCase())
+        .snapshots()
+        .map((event) =>
+            event.docs.map((doc) => Todo.fromJson(doc.data())).toList());
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -129,12 +112,7 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    //query = 'p';
-    //final searched = todolookup.searchString(query);
-    //print(searched);
+  Widget displayList(BuildContext context){
     return Column(
       children: [
         Expanded(
@@ -154,7 +132,7 @@ class CustomSearchDelegate extends SearchDelegate {
                   final todo = snapshot.data!;
                   return ListView(
                     padding: const EdgeInsets.all(20),
-                    children: todo.map(buildTodo).toList());
+                    children: todo.map(taskpage.buildTodo).toList());
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -167,53 +145,17 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return displayList(context);
+    
+  }
+
+  @override
   Widget buildSuggestions(BuildContext context) {
     // TODO: implement buildResults
-
-    return Column(
-      children: [
-        Expanded(
-            flex: 9,
-            child: Container(
-                child: StreamBuilder<List<Todo>>(
-              stream: readTodo(query),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      "Something is Wrong! ${snapshot.error}",
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                } else if (snapshot.hasData) {
-                  final todo = snapshot.data!;
-                  return ListView(children: todo.map(buildTodo).toList());
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            )))
-      ],
-    );
+    return displayList(context);
   }
 }
 
-Route _SlideUpAddTask() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => AddTaskPage(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
 
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
