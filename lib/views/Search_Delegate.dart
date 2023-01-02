@@ -4,6 +4,7 @@ class CustomSearchDelegate extends SearchDelegate {
   get context => null;
   late final toDo_lookup todolookup;
 
+
   Widget buildTodo(Todo todo) {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
@@ -66,7 +67,6 @@ class CustomSearchDelegate extends SearchDelegate {
     return FirebaseFirestore.instance
         .collection('todo')
         .where('user_id', isEqualTo: auth.currentUser!.uid)
-        .where('title'.toLowerCase(), isEqualTo: string.toLowerCase())
         .snapshots()
         .map((event) =>
             event.docs.map((doc) => Todo.fromJson(doc.data())).toList());
@@ -111,10 +111,19 @@ class CustomSearchDelegate extends SearchDelegate {
                     ),
                   );
                 } else if (snapshot.hasData) {
-                  final todo = snapshot.data!;
-                  return ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: todo.map(buildTodo).toList());
+                  late List<Todo> newTodos = [];
+                  final todos = snapshot.data!;
+                    for (var todo in todos) {
+                      String title = todo.title!;
+                      if (title.toLowerCase().contains(query.toLowerCase())) {
+                        newTodos.add(todo);
+                      }
+                    }
+                  // final todo = snapshot.data!;
+                   return ListView(
+                     padding: const EdgeInsets.all(20),
+                     children: newTodos.map(buildTodo).toList());
+                    
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
