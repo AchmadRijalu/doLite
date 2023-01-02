@@ -1,37 +1,25 @@
 part of 'Pages.dart';
-class cardBuilder extends StatefulWidget {
-  const cardBuilder({super.key});
 
-  @override
-  State<cardBuilder> createState() => _cardBuilderState();
-}
+class CustomSearchDelegate extends SearchDelegate {
+  get context => null;
+  late final toDo_lookup todolookup;
 
-class _cardBuilderState extends State<cardBuilder> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-  
-Widget buildTodo(Todo todo) {
+  Widget buildTodo(Todo todo) {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
       children: [
         ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Dismissible(
+              key: UniqueKey(),
                 onDismissed: (DismissDirection direction) {
-                  builder: (BuildContext context) {
-                    setState(() {
                       final docTodo = FirebaseFirestore.instance
                                     .collection('todo')
                                     .doc(todo.id);
 
                       docTodo.delete();
                       Navigator.of(context).pop(true);
-                    });
-                  };
                 },
-                key: UniqueKey(),
                 background: Container(
                   decoration: ShapeDecoration(
                     color: Colors.red,
@@ -71,12 +59,6 @@ Widget buildTodo(Todo todo) {
       ],
     );
   }
-
-}
-class CustomSearchDelegate extends SearchDelegate {
-  get context => null;
-  late final toDo_lookup todolookup;
-  final _cardBuilderState taskpage = new _cardBuilderState();
 
 
   Stream<List<Todo>> readTodo(String string) {
@@ -132,7 +114,7 @@ class CustomSearchDelegate extends SearchDelegate {
                   final todo = snapshot.data!;
                   return ListView(
                     padding: const EdgeInsets.all(20),
-                    children: todo.map(taskpage.buildTodo).toList());
+                    children: todo.map(buildTodo).toList());
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
