@@ -270,8 +270,31 @@ class _TaskPageState extends State<TaskPage> {
                         );
                       } else if (snapshot.hasData) {
                         final todo = snapshot.data!;
-
-                        return ListView(children: todo.map(buildTodo).toList());
+                        if (todo.length == 0) {
+                          return Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/images/icons/noTask.svg',
+                                width: 64,
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                "No do Detected?!",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ));
+                        } else {
+                          return ListView(
+                              children: todo.map(buildTodo).toList());
+                        }
                       } else {
                         return Center(
                           child: CircularProgressIndicator(),

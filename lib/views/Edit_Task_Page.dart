@@ -488,7 +488,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
               ),
             );
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

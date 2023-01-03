@@ -256,7 +256,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                         ],
                       );
                     } else {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }
                   }),
                 ),

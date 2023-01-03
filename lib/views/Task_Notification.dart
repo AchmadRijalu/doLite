@@ -51,18 +51,43 @@ class _TaskNotificationState extends State<TaskNotification> {
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       child: Row(
                         children: [
-                          Icon(Icons.notifications, size: 24),
+                          Icon(
+                            Icons.notifications,
+                            size: 24,
+                            color: Colors.red,
+                          ),
                           Text(
                             "AWASS!",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
                           ),
                         ],
                       ),
                     ),
                     Spacer(),
-                    Text(todo.title.toString() + " sudah mendekati deadline!"),
-                    Text("Segera dikerjakan ya!"),
+                    Row(
+                      children: [
+                        Text(
+                          todo.title.toString(),
+                          style: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          " sudah mendekati deadline!",
+                          style: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                    Text(
+                      "Segera dikerjakan ya!",
+                      style: TextStyle(
+                          fontFamily: "Quicksand", fontWeight: FontWeight.w500),
+                    ),
                   ],
                 ),
               ),

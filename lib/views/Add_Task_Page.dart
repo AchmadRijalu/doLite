@@ -377,15 +377,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                         description: Text(
                                             "Please fill the status and category for your task!"))
                                     .show(context);
-                                // Fluttertoast.showToast(
-                                //     msg:
-                                //         "Please fill the status and category for your task!",
-                                //     toastLength: Toast.LENGTH_SHORT,
-                                //     gravity: ToastGravity.BOTTOM,
-                                //     timeInSecForIosWeb: 1,
-                                //     backgroundColor: Colors.red,
-                                //     textColor: Colors.white,
-                                //     fontSize: 16.0);
                               } else {
                                 await createTodo(
                                     description: descriptionController.text,
@@ -406,20 +397,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                             .difference(DateTime.now())
                                             .inDays +
                                         1);
-                                // print((_dateTime
-                                //                 .difference(DateTime.now())
-                                //                 .inDays +
-                                //             1)
-                                //         .toString() +
-                                //     " days will be sent");
-                                // Fluttertoast.showToast(
-                                //     msg: "New Todo Created",
-                                //     toastLength: Toast.LENGTH_SHORT,
-                                //     fontSize: 12,
-                                //     backgroundColor: Colors.amber,
-                                //     textColor: Colors.black);
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    TaskPage.routeNames, (route) => false);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TaskPage(),
+                                    ));
                               }
                             }
                           }),

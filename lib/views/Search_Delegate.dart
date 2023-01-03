@@ -4,7 +4,6 @@ class CustomSearchDelegate extends SearchDelegate {
   get context => null;
   late final toDo_lookup todolookup;
 
-
   Widget buildTodo(Todo todo) {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
@@ -12,14 +11,14 @@ class CustomSearchDelegate extends SearchDelegate {
         ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Dismissible(
-              key: UniqueKey(),
+                key: UniqueKey(),
                 onDismissed: (DismissDirection direction) {
-                      final docTodo = FirebaseFirestore.instance
-                                    .collection('todo')
-                                    .doc(todo.id);
+                  final docTodo = FirebaseFirestore.instance
+                      .collection('todo')
+                      .doc(todo.id);
 
-                      docTodo.delete();
-                      Navigator.of(context).pop(true);
+                  docTodo.delete();
+                  Navigator.of(context).pop(true);
                 },
                 background: Container(
                   decoration: ShapeDecoration(
@@ -61,7 +60,6 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-
   Stream<List<Todo>> readTodo(String string) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     return FirebaseFirestore.instance
@@ -94,7 +92,7 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  Widget displayList(BuildContext context){
+  Widget displayList(BuildContext context) {
     return Column(
       children: [
         Expanded(
@@ -113,17 +111,16 @@ class CustomSearchDelegate extends SearchDelegate {
                 } else if (snapshot.hasData) {
                   late List<Todo> newTodos = [];
                   final todos = snapshot.data!;
-                    for (var todo in todos) {
-                      String title = todo.title!;
-                      if (title.toLowerCase().contains(query.toLowerCase())) {
-                        newTodos.add(todo);
-                      }
+                  for (var todo in todos) {
+                    String title = todo.title!;
+                    if (title.toLowerCase().contains(query.toLowerCase())) {
+                      newTodos.add(todo);
                     }
+                  }
                   // final todo = snapshot.data!;
-                   return ListView(
-                     padding: const EdgeInsets.all(20),
-                     children: newTodos.map(buildTodo).toList());
-                    
+                  return ListView(
+                      padding: const EdgeInsets.all(20),
+                      children: newTodos.map(buildTodo).toList());
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -139,7 +136,6 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     // TODO: implement buildResults
     return displayList(context);
-    
   }
 
   @override
@@ -148,5 +144,3 @@ class CustomSearchDelegate extends SearchDelegate {
     return displayList(context);
   }
 }
-
-
