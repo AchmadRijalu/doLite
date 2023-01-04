@@ -126,38 +126,6 @@ class _TaskNotificationState extends State<TaskNotification> {
                 Expanded(
                     flex: 9,
                     child: Container(
-                        //     child: FutureBuilder<DocumentSnapshot>(
-                        //   future:
-                        //       _db.collection('todo')
-                        //       .doc(auth.currentUser!.uid).get(),
-                        //   builder: (context, snapshot) {
-                        //     if (snapshot.hasError) {
-                        //       return Center(
-                        //         child: Text(
-                        //           "Something is Wrong! ${snapshot.error}",
-                        //           textAlign: TextAlign.center,
-                        //         ),
-                        //       );
-                        //     } else if (snapshot.hasData) {
-                        //       final todo = snapshot.data!;
-                        //       Map<String, dynamic> datas =
-                        //           todo.data() as Map<String, dynamic>;
-                        //       DateTime _now = DateTime.now();
-                        //       DateTime _equalTime =
-                        //           DateTime(_now.year, _now.month, _now.day, 12, 00, 00);
-                        //       DateTime _duedate = datas['duedate'];
-                        //       if (_duedate.difference(_equalTime).inHours == 24) {
-                        //         return ListView(children: data.map(buildNotif));
-                        //       }
-                        //     } else {
-                        //       return Center(
-                        //         // child: CircularProgressIndicator(),
-                        //         child: Text("Still no notification yet..."),
-                        //       );
-                        //     }
-                        //   },
-                        // )
-                        // decoration: BoxDecoration(color: Colors.black),
                         child: StreamBuilder<List<Todo>>(
                       stream: readTodo(),
                       builder: (context, snapshot) {
@@ -176,11 +144,6 @@ class _TaskNotificationState extends State<TaskNotification> {
                             if (diff <= 1) {
                               newTodos.add(todo);
                             }
-
-                            //debug
-                            // print(due.toString());
-                            // print(todo.title.toString());
-                            // print(diff.toString());
                           }
                           return ListView(
                               children: newTodos.map(buildNotif).toList());

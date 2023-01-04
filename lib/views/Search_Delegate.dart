@@ -8,51 +8,65 @@ class CustomSearchDelegate extends SearchDelegate {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
       children: [
-        ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Dismissible(
-                key: UniqueKey(),
-                onDismissed: (DismissDirection direction) {
-                  final docTodo = FirebaseFirestore.instance
-                      .collection('todo')
-                      .doc(todo.id);
+        Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade400,
+                blurRadius: 8,
+                offset: Offset(1, 5), // Shadow position
+              ),
+            ],
+          ),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (DismissDirection direction) {
+                    final docTodo = FirebaseFirestore.instance
+                        .collection('todo')
+                        .doc(todo.id);
 
-                  docTodo.delete();
-                  Navigator.of(context).pop(true);
-                },
-                background: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                secondaryBackground: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: <Color>[Colors.red, Colors.red], // red to yellow
+                    docTodo.delete();
+                    Navigator.of(context).pop(true);
+                  },
+                  background: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
-                  child: Card(
-                    color: Colors.red,
-                    margin: EdgeInsets.all(0),
-                    child: TaskTile(
-                        todoID: todo.id,
-                        title: todo.title,
-                        status: todo.status,
-                        duedate:
-                            dueDateFormat.format(todo.duedate as DateTime)),
+                  secondaryBackground: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   ),
-                ))),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: <Color>[
+                          Colors.red,
+                          Colors.red
+                        ], // red to yellow
+                      ),
+                    ),
+                    child: Card(
+                      color: Colors.red,
+                      margin: EdgeInsets.all(0),
+                      child: TaskTile(
+                          todoID: todo.id,
+                          title: todo.title,
+                          status: todo.status,
+                          duedate:
+                              dueDateFormat.format(todo.duedate as DateTime)),
+                    ),
+                  ))),
+        ),
         SizedBox(
           height: 12,
         )

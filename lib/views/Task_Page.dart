@@ -83,87 +83,102 @@ class _TaskPageState extends State<TaskPage> {
     DateFormat dueDateFormat = DateFormat("d MMMM y");
     return Column(
       children: [
-        ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Dismissible(
-                confirmDismiss: (DismissDirection direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Confirm"),
-                        content: const Text(
-                            "Are you sure you wish to delete this Task?"),
-                        actions: <Widget>[
-                          ElevatedButton(
+        Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade400,
+                blurRadius: 8,
+                offset: Offset(1, 5), // Shadow position
+              ),
+            ],
+          ),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Dismissible(
+                  confirmDismiss: (DismissDirection direction) async {
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Confirm"),
+                          content: const Text(
+                              "Are you sure you wish to delete this Task?"),
+                          actions: <Widget>[
+                            ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.black),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16)))),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                                child: const Text("Cancel")),
+                            ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all(Colors.black),
+                                      MaterialStateProperty.all(Colors.red),
                                   shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(16)))),
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: const Text("Cancel")),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.red),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)))),
-                            onPressed: () {
-                              final docTodo = FirebaseFirestore.instance
-                                  .collection('todo')
-                                  .doc(todo.id);
+                              onPressed: () {
+                                final docTodo = FirebaseFirestore.instance
+                                    .collection('todo')
+                                    .doc(todo.id);
 
-                              docTodo.delete();
-                              Navigator.of(context).pop(true);
-                            },
-                            child: const Text("Delete"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                key: UniqueKey(),
-                background: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                secondaryBackground: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: <Color>[Colors.red, Colors.red], // red to yellow
+                                docTodo.delete();
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text("Delete"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  key: UniqueKey(),
+                  background: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
-                  child: Card(
-                    color: Colors.red,
-                    margin: EdgeInsets.all(0),
-                    child: TaskTile(
-                        todoID: todo.id,
-                        title: todo.title,
-                        status: todo.status,
-                        duedate:
-                            dueDateFormat.format(todo.duedate as DateTime)),
+                  secondaryBackground: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   ),
-                ))),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: <Color>[
+                          Colors.red,
+                          Colors.red
+                        ], // red to yellow
+                      ),
+                    ),
+                    child: Card(
+                      color: Colors.red,
+                      margin: EdgeInsets.all(0),
+                      child: TaskTile(
+                          todoID: todo.id,
+                          title: todo.title,
+                          status: todo.status,
+                          duedate:
+                              dueDateFormat.format(todo.duedate as DateTime)),
+                    ),
+                  ))),
+        ),
         SizedBox(
           height: 12,
         )
@@ -201,7 +216,7 @@ class _TaskPageState extends State<TaskPage> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(50),
                           child: Image.asset(
-                            "assets/images/crazy scientist.png",
+                            "assets/images/crazyscientist.png",
                             width: 50,
                           ),
                         ),

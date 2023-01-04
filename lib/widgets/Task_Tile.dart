@@ -22,6 +22,7 @@ class TaskTile extends StatelessWidget {
       }),
       child: Container(
           decoration: BoxDecoration(
+            boxShadow: [],
             color: Colors.white,
             borderRadius: BorderRadius.vertical(
                 top: Radius.circular(12), bottom: Radius.circular(12)),
